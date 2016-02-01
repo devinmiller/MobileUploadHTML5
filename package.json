@@ -1,0 +1,22 @@
+{
+  "name": "mobile-upload-with-html5",
+  "version": "1.0.0",
+  "description": "A proof of concept for handling uploads on mobile devices with HTML 5.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/devinmiller/MobileUploadHTML5.git"
+  },
+  "author": "Devin Miller",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/devinmiller/MobileUploadHTML5/issues"
+  },
+  "homepage": "https://github.com/devinmiller/MobileUploadHTML5#readme",
+  "dependencies": {
+    "express": "^4.13.4"
+  }
+}
