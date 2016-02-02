@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<title>Mobile Upload</title>
+        <script src="modernizr.js"></script>
+	</head>
+	<body>
+		<div class="container">
+            <h2>Supported Features:</h2>
+            <div>
+                <table>
+                    <tbody>
+                        <tr>
+                            <td>File API</td>
+                            <td class="file-api"></td>
+                        </tr>
+                        <tr>
+                            <td>Filesystem API</td>
+                            <td class="filesystem-api"></td>
+                        </tr>
+                        <tr>
+                            <td>File Input Attribute</td>
+                            <td class="file-input-attr"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <h2>Select File</h2>
+            <div>
+                <form>
+                    <input id="file" type="file" accept="image/*" />
+                </form>
+            </div>
+		</div>
+		<script src="bundle.js"></script>
+	</body>
+</html>
