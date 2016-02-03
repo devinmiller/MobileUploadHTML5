@@ -62,11 +62,11 @@
 	    (0, _jquery2.default)('.file-input-attr').html(Modernizr.fileinput || 'false');
 	    (0, _jquery2.default)('.canvas-api').html(Modernizr.canvas || 'false');
 	
+	    refreshImages();
+	
 	    var $inputField = (0, _jquery2.default)('#file');
 	
 	    $inputField.on('change', function (e) {
-	        console.log('derp');
-	
 	        var file = e.target.files[0];
 	
 	        if (file) {
@@ -154,12 +154,47 @@
 	            success: function success(data) {
 	                if (data.success) {
 	                    alert('Your file was successfully uploaded!');
+	
+	                    refreshImages();
 	                } else {
 	                    alert('There was an error uploading your file!');
 	                }
 	            },
 	            error: function error(data) {
 	                alert('There was an error uploading your file!');
+	            }
+	        });
+	    }
+	
+	    function refreshImages() {
+	        var emptyList = (0, _jquery2.default)('.file-list-empty');
+	        var imageList = (0, _jquery2.default)('.file-list');
+	
+	        emptyList.show();
+	        imageList.hide();
+	
+	        _jquery2.default.get('/upload', function (response) {
+	            console.log(response);
+	
+	            if (response.success === true) {
+	                response.entries.forEach(function (blob) {
+	                    var image = new Image();
+	
+	                    //format to access blob storage items
+	                    //http://<storage-account-name>.blob.core.windows.net/<container-name>/<blob-name> 
+	                    image.src = 'http://testblobstorage.blob.core.windows.net/mobile-uploads/' + blob.name;
+	
+	                    var newWidth = image.width / 2;
+	                    var newHeight = image.height / 2;
+	
+	                    image.width = newWidth;
+	                    image.height = newHeight;
+	
+	                    imageList.append((0, _jquery2.default)('<li></li>').append(image));
+	                });
+	
+	                emptyList.hide();
+	                imageList.show();
 	            }
 	        });
 	    }
