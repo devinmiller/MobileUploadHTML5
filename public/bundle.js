@@ -57,8 +57,10 @@
 	
 	(0, _jquery2.default)(function () {
 	    (0, _jquery2.default)('.file-api').html(Modernizr.filereader);
-	    (0, _jquery2.default)('.filesystem-api').html(Modernizr.filesystem);
-	    (0, _jquery2.default)('.file-input-attr').html(Modernizr.fileinput);
+	    (0, _jquery2.default)('.filesystem-api').html(Modernizr.filesystem || 'false');
+	    (0, _jquery2.default)('.file-input-attr').html(Modernizr.fileinput || 'false');
+	    (0, _jquery2.default)('.file-input-attr').html(Modernizr.fileinput || 'false');
+	    (0, _jquery2.default)('.canvas-api').html(Modernizr.canvas || 'false');
 	
 	    var $inputField = (0, _jquery2.default)('#file');
 	
@@ -80,7 +82,7 @@
 	        var reader = new FileReader();
 	
 	        reader.onloadend = function () {
-	            processFile(reader.result, file.type);
+	            processFile(reader.result, file.type, file.name);
 	        };
 	
 	        reader.onerror = function () {
@@ -90,7 +92,7 @@
 	        reader.readAsDataURL(file);
 	    }
 	
-	    function processFile(dataURL, fileType) {
+	    function processFile(dataURL, fileType, fileName) {
 	        var maxWidth = 800;
 	        var maxHeight = 800;
 	
@@ -129,7 +131,7 @@
 	
 	            dataURL = canvas.toDataURL(fileType);
 	
-	            sendFile(dataURL);
+	            sendFile(dataURL, fileName);
 	        };
 	
 	        image.onerror = function () {
@@ -137,12 +139,11 @@
 	        };
 	    }
 	
-	    function sendFile(fileData) {
+	    function sendFile(fileData, fileName) {
 	        var formData = new FormData();
+	        var file = dataURLtoBlob(fileData);
 	
-	        formData.append('imageData', fileData);
-	
-	        console.log('Sending file...');
+	        formData.append('file', file, fileName);
 	
 	        _jquery2.default.ajax({
 	            type: 'POST',
@@ -161,6 +162,18 @@
 	                alert('There was an error uploading your file!');
 	            }
 	        });
+	    }
+	
+	    function dataURLtoBlob(dataurl) {
+	        var arr = dataurl.split(','),
+	            mime = arr[0].match(/:(.*?);/)[1],
+	            bstr = atob(arr[1]),
+	            n = bstr.length,
+	            u8arr = new Uint8Array(n);
+	        while (n--) {
+	            u8arr[n] = bstr.charCodeAt(n);
+	        }
+	        return new Blob([u8arr], { type: mime });
 	    }
 	});
 

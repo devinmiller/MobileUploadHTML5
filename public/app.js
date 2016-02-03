@@ -2,9 +2,10 @@ import $ from 'jquery';
 
 $(function() {
     $('.file-api').html(Modernizr.filereader);
-    $('.filesystem-api').html(Modernizr.filesystem);
-    $('.file-input-attr').html(Modernizr.fileinput);
-    
+    $('.filesystem-api').html(Modernizr.filesystem || 'false');
+    $('.file-input-attr').html(Modernizr.fileinput || 'false');
+    $('.file-input-attr').html(Modernizr.fileinput || 'false');
+    $('.canvas-api').html(Modernizr.canvas || 'false');
     
     var $inputField = $('#file');
 
@@ -26,7 +27,7 @@ $(function() {
         var reader = new FileReader();
 
         reader.onloadend = function () {
-            processFile(reader.result, file.type);
+            processFile(reader.result, file.type, file.name);
         }
 
         reader.onerror = function () {
@@ -36,7 +37,7 @@ $(function() {
         reader.readAsDataURL(file);
     }
     
-    function processFile(dataURL, fileType) {
+    function processFile(dataURL, fileType, fileName) {
         var maxWidth = 800;
         var maxHeight = 800;
 
@@ -74,8 +75,8 @@ $(function() {
             context.drawImage(this, 0, 0, newWidth, newHeight);
 
             dataURL = canvas.toDataURL(fileType);
-
-            sendFile(dataURL);
+            
+            sendFile(dataURL, fileName);
         };
 
         image.onerror = function () {
@@ -83,12 +84,11 @@ $(function() {
         };
     }
 
-    function sendFile(fileData) {
+    function sendFile(fileData, fileName) {
         var formData = new FormData();
+        var file = dataURLtoBlob(fileData);
         
-        formData.append('imageData', fileData);
-
-        console.log('Sending file...');
+        formData.append('file', file, fileName);
 
         $.ajax({
             type: 'POST',
@@ -107,6 +107,15 @@ $(function() {
                 alert('There was an error uploading your file!');
             }
         });
+    }
+    
+    function dataURLtoBlob(dataurl) {
+        var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
+            bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
+        while(n--){
+            u8arr[n] = bstr.charCodeAt(n);
+        }
+        return new Blob([u8arr], {type:mime});
     }
 });
 
