@@ -118,6 +118,8 @@ $(function() {
         emptyList.show();
         imageList.hide();
         
+        imageList.empty();
+        
         $.get('/upload', function(response) {
             console.log(response);
             
@@ -132,15 +134,17 @@ $(function() {
                     var newWidth = image.width/2;
                     var newHeight = image.height/2;
                     
-                    image.width = newWidth;
-                    image.height = newHeight;
+                    //image.width = newWidth;
+                    //image.height = newHeight;
                     
                     imageList.append(
                         $('<li></li>').append(image));
                 });
                 
-                emptyList.hide();
-                imageList.show();
+                if(response.entries.length > 0) {
+                    emptyList.hide();
+                    imageList.show();
+                }
             }
         });
     }
